@@ -1,6 +1,5 @@
-import { Button, Input, Select, Switch, TitledGreyBox } from '@pterodactyl/sdk';
+import { Badge, Button, Input, Select, Switch, TitledGreyBox } from '@pterodactyl/sdk';
 import type { Property, SectionId } from '../lib/properties';
-import Pill from '../components/Pill';
 import SectionHeading from '../components/SectionHeading';
 
 export interface PropertySection {
@@ -39,8 +38,8 @@ function isInline(property: Property): boolean {
 function Badges({ property, changed }: { property: Property; changed: boolean }) {
     return (
         <>
-            {property.managed && <Pill>Managed</Pill>}
-            {changed && <Pill tone='warning'>Changed</Pill>}
+            {property.managed && <Badge>Managed</Badge>}
+            {changed && <Badge tone='warning'>Changed</Badge>}
         </>
     );
 }

@@ -31,7 +31,8 @@ export default function CleanLogsDialog({ open, onClose, server }: { open: boole
     const clean = useMutation({
         mutationFn: () => cleanLogs(server, { ...options, dry_run: false }),
         onSuccess: ({ files, archives }) => {
-            toast.success(archives.length > 0 ? `Archived and removed ${files.length} files.` : `Deleted ${files.length} files.`);
+            const count = `${files.length} ${files.length === 1 ? 'file' : 'files'}`;
+            toast.success(archives.length > 0 ? `Archived and removed ${count}.` : `Deleted ${count}.`);
             queryClient.invalidateQueries({ queryKey: keys.logs(server) });
             onClose();
         },
@@ -67,7 +68,7 @@ export default function CleanLogsDialog({ open, onClose, server }: { open: boole
                 </div>
                 <Switch label='Archive first' description='Pack the files into one archive before deleting them.' checked={archive} onChange={setArchive} />
                 <p className='mc:rounded-sm mc:bg-sunken mc:px-3 mc:py-2 mc:text-sm'>
-                    {preview.isFetching ? 'Counting files...' : `${files.length} files, ${formatBytes(size)}`}
+                    {preview.isFetching ? 'Counting files...' : `${files.length} ${files.length === 1 ? 'file' : 'files'}, ${formatBytes(size)}`}
                 </p>
                 <div className='mc:border-t mc:border-border mc:pt-4'>
                     <Switch

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, NamedIcon } from '@pterodactyl/sdk';
 import type { LogLine } from '../lib/logs';
 import { expandTabs, lineIndex, rowAt, rowOffsets, wrappedRows } from '../lib/viewer';
 
@@ -135,7 +136,15 @@ export default function LogViewer({ lines, search, wrap }: { lines: LogLine[]; s
                 </div>
             )}
             {lines.length === 0 ? (
-                <p className='mc:p-4 mc:text-muted-foreground'>No lines match.</p>
+                <Empty className='mc:h-full mc:font-sans'>
+                    <EmptyHeader>
+                        <EmptyMedia variant='icon'>
+                            <NamedIcon name='search-x' />
+                        </EmptyMedia>
+                        <EmptyTitle>No lines match</EmptyTitle>
+                        <EmptyDescription>Change the search or show all lines.</EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             ) : (
                 <div className={wrap ? 'mc:relative' : 'mc:relative mc:min-w-max'} style={{ height: offsets[lines.length] }}>
                     {lines.slice(start, end).map((line, index) => (

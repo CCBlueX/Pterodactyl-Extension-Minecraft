@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Input, Select, ServerContentBlock, Spinner, Switch, TitledGreyBox, httpErrorToHuman, toast, useCurrentServerRequired, useServerPermission } from '@pterodactyl/sdk';
+import { Button, Input, Select, ServerContentBlock, ServerError, Spinner, Switch, TitledGreyBox, httpErrorToHuman, toast, useCurrentServerRequired, useServerPermission } from '@pterodactyl/sdk';
 import { getLogContent, getLogs, keys, shareLog, type LogFile } from '../api';
 import { formatBytes, formatDate } from '../lib/format';
 import { countLevels, filterLines, parseLog, type Filter } from '../lib/logs';
@@ -43,7 +43,9 @@ export default function LogsScreen() {
         URL.revokeObjectURL(link.href);
     };
 
-    const fileChooser = files.isLoading ? (
+    const fileChooser = files.isError ? (
+        <ServerError title='Could not list the logs' message={httpErrorToHuman(files.error)} onRetry={() => files.refetch()} />
+    ) : files.isLoading ? (
         <Spinner centered />
     ) : list.length === 0 ? (
         <p className='mc:text-sm mc:text-muted-foreground'>No logs yet.</p>

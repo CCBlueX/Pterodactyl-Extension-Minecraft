@@ -1,3 +1,4 @@
+import { Button, Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, NamedIcon } from '@pterodactyl/sdk';
 import type { Player } from '../api';
 import PlayerHead from '../components/PlayerHead';
 import PlayerBadges from './PlayerBadges';
@@ -23,28 +24,32 @@ export function FilterChips({ filter, counts, onFilter }: Props) {
 
     return (
         <div className='mc:grid mc:grid-cols-2 mc:gap-2'>
-            {chips.map((chip) => (
-                <button
-                    key={chip.id}
-                    type='button'
-                    aria-pressed={chip.id === filter}
-                    onClick={() => onFilter(chip.id)}
-                    className={
-                        chip.id === filter
-                            ? 'mc:rounded-sm mc:bg-primary mc:px-3 mc:py-1.5 mc:text-left mc:text-xs mc:text-primary-foreground'
-                            : 'mc:rounded-sm mc:border mc:border-border mc:bg-card mc:px-3 mc:py-1.5 mc:text-left mc:text-xs mc:text-muted-foreground mc:transition-colors mc:hover:text-foreground'
-                    }
-                >
-                    {chip.label} ({counts[chip.id]})
-                </button>
-            ))}
+            {chips.map((chip) => {
+                const Chip = chip.id === filter ? Button : Button.Text;
+
+                return (
+                    <Chip key={chip.id} size='small' aria-pressed={chip.id === filter} onClick={() => onFilter(chip.id)} className='mc:justify-start'>
+                        {chip.label} ({counts[chip.id]})
+                    </Chip>
+                );
+            })}
         </div>
     );
 }
 
 export function PlayerList({ players, selected, onSelect }: { players: Player[]; selected: string | null; onSelect: (player: Player) => void }) {
     if (players.length === 0) {
-        return <p className='mc:py-6 mc:text-center mc:text-sm mc:text-muted-foreground'>No players found.</p>;
+        return (
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant='icon'>
+                        <NamedIcon name='users' />
+                    </EmptyMedia>
+                    <EmptyTitle>No players found</EmptyTitle>
+                    <EmptyDescription>Players show up here once they join or are added to a list.</EmptyDescription>
+                </EmptyHeader>
+            </Empty>
+        );
     }
 
     return (
@@ -54,11 +59,10 @@ export function PlayerList({ players, selected, onSelect }: { players: Player[];
 
                 return (
                     <li key={key}>
-                        <button
-                            type='button'
+                        <Button.Text
                             onClick={() => onSelect(player)}
                             aria-current={key === selected}
-                            className={`mc:flex mc:w-full mc:items-center mc:gap-3 mc:rounded-sm mc:border mc:bg-card mc:p-2 mc:text-left mc:shadow-sm mc:transition-colors ${
+                            className={`mc:h-auto mc:w-full mc:justify-start mc:gap-3 mc:border mc:p-2 mc:text-left ${
                                 key === selected ? 'mc:border-primary' : 'mc:border-transparent mc:hover:border-border'
                             }`}
                         >
@@ -70,7 +74,7 @@ export function PlayerList({ players, selected, onSelect }: { players: Player[];
                                 <span className='mc:block mc:truncate mc:text-sm mc:text-foreground'>{player.name}</span>
                                 <PlayerBadges player={player} />
                             </span>
-                        </button>
+                        </Button.Text>
                     </li>
                 );
             })}

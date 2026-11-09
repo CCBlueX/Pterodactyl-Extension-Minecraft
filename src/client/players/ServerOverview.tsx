@@ -1,6 +1,5 @@
-import { Switch, useServerPermission } from '@pterodactyl/sdk';
+import { Badge, Switch, useServerPermission } from '@pterodactyl/sdk';
 import type { PlayersResponse } from '../api';
-import Pill from '../components/Pill';
 import { usePlayerAction } from './hooks';
 
 export default function ServerOverview({ data }: { data: PlayersResponse }) {
@@ -12,7 +11,7 @@ export default function ServerOverview({ data }: { data: PlayersResponse }) {
         <div className='mc:rounded-sm mc:bg-card mc:p-3 mc:shadow-md'>
             <div className='mc:flex mc:items-center mc:justify-between'>
                 <h2 className='mc:font-header mc:text-sm mc:font-semibold mc:uppercase mc:tracking-wide mc:text-foreground'>Server overview</h2>
-                <Pill tone={status.online ? 'success' : 'muted'}>{status.online ? 'Online' : 'Offline'}</Pill>
+                <Badge tone={status.online ? 'success' : 'neutral'}>{status.online ? 'Online' : 'Offline'}</Badge>
             </div>
             <div className='mc:mt-3 mc:grid mc:grid-cols-2 mc:gap-2'>
                 <div className='mc:rounded-sm mc:border mc:border-border mc:bg-sunken mc:p-2'>
